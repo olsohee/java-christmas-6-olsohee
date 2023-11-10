@@ -1,10 +1,9 @@
 package christmas.domain;
 
+import christmas.ErrorMessage;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 class OrderMenuTest {
 
@@ -23,6 +22,6 @@ class OrderMenuTest {
     void createOrderMenuFail() {
         Assertions.assertThatThrownBy(() -> new OrderMenu("타파스스", 1))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+                .hasMessageContaining(ErrorMessage.INVALID_ORDER.getErrorMessage()));
     }
 }

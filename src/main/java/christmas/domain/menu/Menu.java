@@ -1,5 +1,7 @@
 package christmas.domain.menu;
 
+import christmas.ErrorMessage;
+
 import java.util.Arrays;
 
 public enum Menu {
@@ -32,7 +34,7 @@ public enum Menu {
         return Arrays.stream(values())
                 .filter(menu -> menu.menuName.equals(menuName))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요."));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_ORDER.getErrorMessage()));
     }
 
     public int getPrice() {
