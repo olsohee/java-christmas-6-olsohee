@@ -40,4 +40,8 @@ public enum Menu {
     public int getPrice() {
         return price;
     }
+
+    public Category getCategory() {
+        return category;
+    }
 }

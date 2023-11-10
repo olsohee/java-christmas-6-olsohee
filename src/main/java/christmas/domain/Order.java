@@ -21,4 +21,18 @@ public class Order {
     public int getTotalOrderPrice() {
         return totalOrderPrice;
     }
+
+    public boolean hasDesertMenu() {
+        return orderMenus.stream()
+                .anyMatch(orderMenu -> orderMenu.isDessertMenu());
+    }
+
+    public boolean hasMainMenu() {
+        return orderMenus.stream()
+                .anyMatch(orderMenu -> orderMenu.isMainMenu());
+    }
+
+    public boolean isApplicableGiftEvent() {
+        return totalOrderPrice >= 120000;
+    }
 }

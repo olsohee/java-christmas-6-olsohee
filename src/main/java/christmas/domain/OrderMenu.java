@@ -1,5 +1,6 @@
 package christmas.domain;
 
+import christmas.domain.menu.Category;
 import christmas.domain.menu.Menu;
 
 public class OrderMenu {
@@ -14,5 +15,13 @@ public class OrderMenu {
 
     public int calculateOrderPrice() {
         return menu.getPrice() * quantity;
+    }
+
+    public boolean isDessertMenu() {
+        return menu.getCategory().equals(Category.DESERT);
+    }
+
+    public boolean isMainMenu() {
+        return menu.getCategory().equals(Category.MAIN);
     }
 }
