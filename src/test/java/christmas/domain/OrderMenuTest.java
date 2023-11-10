@@ -22,6 +22,6 @@ class OrderMenuTest {
     void createOrderMenuFail() {
         Assertions.assertThatThrownBy(() -> new OrderMenu("타파스스", 1))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(ErrorMessage.INVALID_ORDER.getErrorMessage()));
+                .hasMessageContaining(ErrorMessage.INVALID_ORDER.getErrorMessage());
     }
 }
