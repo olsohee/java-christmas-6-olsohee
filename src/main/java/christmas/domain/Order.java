@@ -41,9 +41,10 @@ public class Order {
     }
 
     private int getDessertMenuCount() {
-        return (int) orderMenus.stream()
+        return orderMenus.stream()
                 .filter(orderMenu -> orderMenu.isDessertMenu())
-                .count();
+                .mapToInt(orderMenu -> orderMenu.getQuantity())
+                .sum();
     }
 
     public int getWeekendEventBenefitAmount() {
@@ -51,8 +52,9 @@ public class Order {
     }
 
     private int getMainMenuCount() {
-        return (int) orderMenus.stream()
+        return orderMenus.stream()
                 .filter(orderMenu -> orderMenu.isMainMenu())
-                .count();
+                .mapToInt(orderMenus -> orderMenus.getQuantity())
+                .sum();
     }
 }

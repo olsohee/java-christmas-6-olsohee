@@ -24,4 +24,8 @@ public class OrderMenu {
     public boolean isMainMenu() {
         return menu.getCategory().equals(Category.MAIN);
     }
+
+    public int getQuantity() {
+        return quantity;
+    }
 }
