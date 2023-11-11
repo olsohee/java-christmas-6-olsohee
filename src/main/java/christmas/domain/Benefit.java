@@ -6,8 +6,8 @@ import java.util.List;
 
 public class Benefit {
 
-    List<Event> events;
-    int totalBenefitAmount;
+    private List<Event> events;
+    private int totalBenefitAmount;
 
     public Benefit(Order order, Date date) {
         events = getApplicableEvents(order, date);
