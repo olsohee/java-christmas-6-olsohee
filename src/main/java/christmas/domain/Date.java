@@ -38,4 +38,8 @@ public class Date {
     public boolean isApplicableSpecialEvent() {
         return (date == 3 || date == 10 || date == 17 || date == 24 || date == 25 || date == 31);
     }
+
+    public int getChristmasEventBenefitAmount() {
+        return 1000 + (date - 1) * 100;
+    }
 }

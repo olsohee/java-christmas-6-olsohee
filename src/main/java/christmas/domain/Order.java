@@ -35,4 +35,24 @@ public class Order {
     public boolean isApplicableGiftEvent() {
         return totalOrderPrice >= 120000;
     }
+
+    public int getWeekdayEventBenefitAmount() {
+        return getDessertMenuCount() * 2023;
+    }
+
+    private int getDessertMenuCount() {
+        return (int) orderMenus.stream()
+                .filter(orderMenu -> orderMenu.isDessertMenu())
+                .count();
+    }
+
+    public int getWeekendEventBenefitAmount() {
+        return getMainMenuCount() * 2023;
+    }
+
+    private int getMainMenuCount() {
+        return (int) orderMenus.stream()
+                .filter(orderMenu -> orderMenu.isMainMenu())
+                .count();
+    }
 }
