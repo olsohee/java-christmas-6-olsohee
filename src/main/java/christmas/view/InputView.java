@@ -4,7 +4,7 @@ import camp.nextstep.edu.missionutils.Console;
 
 public interface InputView {
 
-    void printStartMessage();
+    void printInputStartMessage();
 
     String readDate();
 

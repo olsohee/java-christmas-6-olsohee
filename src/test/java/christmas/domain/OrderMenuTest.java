@@ -1,6 +1,6 @@
 package christmas.domain;
 
-import christmas.ErrorMessage;
+import christmas.message.ErrorMessage;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +22,6 @@ class OrderMenuTest {
     void createOrderMenuFail() {
         Assertions.assertThatThrownBy(() -> new OrderMenu("타파스스", 1))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(ErrorMessage.INVALID_ORDER.getErrorMessage());
+                .hasMessageContaining(ErrorMessage.INVALID_ORDER_INPUT.getErrorMessage());
     }
 }

@@ -14,7 +14,7 @@ public class ConsoleInputView implements InputView {
     }
 
     @Override
-    public void printStartMessage() {
+    public void printInputStartMessage() {
         printMessage("안녕하세요! 우테코 식당 12월 이벤트 플래너입니다.");
     }
 

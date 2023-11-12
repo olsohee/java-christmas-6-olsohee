@@ -22,9 +22,8 @@ public class ConsoleOutputView implements OutputView {
         return ConsoleOutputViewHolder.consoleOutputView;
     }
 
-
     @Override
-    public void printStartMessage(DateDto dateDto) {
+    public void printOutputStartMessage(DateDto dateDto) {
         printMessage(outputMessage.getStartMessage(dateDto.getDate()));
         printNewLine();
     }

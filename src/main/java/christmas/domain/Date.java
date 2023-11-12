@@ -1,6 +1,6 @@
 package christmas.domain;
 
-import christmas.ErrorMessage;
+import christmas.message.ErrorMessage;
 
 import java.time.LocalDate;
 
@@ -15,7 +15,7 @@ public class Date {
 
     private void validate(int date) {
         if(date < 1 || date > 31) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_DATE.getErrorMessage());
+            throw new IllegalArgumentException(ErrorMessage.INVALID_DATE_INPUT.getErrorMessage());
         }
     }
 

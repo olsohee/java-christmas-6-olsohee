@@ -8,7 +8,7 @@ import christmas.dto.orderMenuDto.OrderDto;
 
 public interface OutputView {
 
-    void printStartMessage(DateDto dateDto);
+    void printOutputStartMessage(DateDto dateDto);
 
     void printOrder(OrderDto orderDto);
 

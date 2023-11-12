@@ -1,6 +1,6 @@
 package christmas.domain;
 
-import christmas.ErrorMessage;
+import christmas.message.ErrorMessage;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +22,6 @@ class DateTest {
     void createDateFail() {
         Assertions.assertThatThrownBy(() -> new Date(0))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(ErrorMessage.INVALID_DATE.getErrorMessage());
+                .hasMessageContaining(ErrorMessage.INVALID_DATE_INPUT.getErrorMessage());
     }
 }
