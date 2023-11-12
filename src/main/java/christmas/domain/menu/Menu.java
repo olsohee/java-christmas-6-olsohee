@@ -37,6 +37,10 @@ public enum Menu {
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_ORDER.getErrorMessage()));
     }
 
+    public String getMenuName() {
+        return menuName;
+    }
+
     public int getPrice() {
         return price;
     }

@@ -25,6 +25,10 @@ public class OrderMenu {
         return menu.getCategory().equals(Category.MAIN);
     }
 
+    public Menu getMenu() {
+        return menu;
+    }
+
     public int getQuantity() {
         return quantity;
     }

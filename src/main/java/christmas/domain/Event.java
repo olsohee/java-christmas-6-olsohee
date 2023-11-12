@@ -44,4 +44,8 @@ public enum Event {
     public int getBenefitAmount(Order order, Date date) {
         return benefitAmount.apply(order, date);
     }
+
+    public String getEventName() {
+        return eventName;
+    }
 }

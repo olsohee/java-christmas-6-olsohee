@@ -18,10 +18,6 @@ public class Order {
                 .sum();
     }
 
-    public int getTotalOrderPrice() {
-        return totalOrderPrice;
-    }
-
     public boolean hasDesertMenu() {
         return orderMenus.stream()
                 .anyMatch(orderMenu -> orderMenu.isDessertMenu());
@@ -56,5 +52,13 @@ public class Order {
                 .filter(orderMenu -> orderMenu.isMainMenu())
                 .mapToInt(orderMenus -> orderMenus.getQuantity())
                 .sum();
+    }
+
+    public List<OrderMenu> getOrderMenus() {
+        return orderMenus;
+    }
+
+    public int getTotalOrderPrice() {
+        return totalOrderPrice;
     }
 }

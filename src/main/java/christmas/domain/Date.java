@@ -42,4 +42,8 @@ public class Date {
     public int getChristmasEventBenefitAmount() {
         return 1000 + (date - 1) * 100;
     }
+
+    public int getDate() {
+        return date;
+    }
 }
