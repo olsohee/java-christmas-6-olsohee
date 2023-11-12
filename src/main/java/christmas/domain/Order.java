@@ -1,5 +1,7 @@
 package christmas.domain;
 
+import christmas.ErrorMessage;
+
 import java.util.List;
 
 public class Order {
@@ -8,8 +10,19 @@ public class Order {
     private int totalOrderPrice;
 
     public Order(List<OrderMenu> orderMenus) {
+        validate();
         this.orderMenus = orderMenus;
         this.totalOrderPrice = calculateTotalOrderPrice();
+    }
+
+    private void validate() {
+        int totalOrderAmount = orderMenus.stream()
+                .mapToInt(orderMenu -> orderMenu.getQuantity())
+                .sum();
+
+        if(totalOrderAmount < 1) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER.getErrorMessage());
+        }
     }
 
     private int calculateTotalOrderPrice() {
