@@ -1,4 +1,4 @@
-package christmas.dto.benefitDto;
+package christmas.dto;
 
 public class BenefitDto {
 

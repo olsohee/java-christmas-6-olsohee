@@ -5,7 +5,9 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 class EventTest {
 
@@ -13,12 +15,12 @@ class EventTest {
     @Test
     void getApplicableEvents() {
         // given
-        Order order = new Order(
-                List.of(new OrderMenu("타파스", 1),
-                        new OrderMenu("티본스테이크", 1),
-                        new OrderMenu("해산물파스타", 2),
-                        new OrderMenu("초코케이크", 1))
-                );
+        Map<String, Integer> orderMenuAndCount = new HashMap<>();
+        orderMenuAndCount.put("타파스", 1);
+        orderMenuAndCount.put("티본스테이크", 1);
+        orderMenuAndCount.put("해산물파스타", 2);
+        orderMenuAndCount.put("초코케이크", 1);
+        Order order = new Order(orderMenuAndCount);
 
         Date date = new Date(3);
 
@@ -34,12 +36,13 @@ class EventTest {
     @Test
     void getTotalBenefitAmount() {
         // given
-        Order order = new Order(
-                List.of(new OrderMenu("타파스", 1),
-                        new OrderMenu("티본스테이크", 1),
-                        new OrderMenu("해산물파스타", 2),
-                        new OrderMenu("초코케이크", 1))
-        );
+        Map<String, Integer> orderMenuAndCount = new HashMap<>();
+        orderMenuAndCount.put("타파스", 1);
+        orderMenuAndCount.put("티본스테이크", 1);
+        orderMenuAndCount.put("해산물파스타", 2);
+        orderMenuAndCount.put("초코케이크", 1);
+
+        Order order = new Order(orderMenuAndCount);
 
         Date date = new Date(3);
 

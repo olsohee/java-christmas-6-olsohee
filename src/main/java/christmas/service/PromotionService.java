@@ -1,11 +1,9 @@
 package christmas.service;
 
 import christmas.domain.*;
-import christmas.dto.BadgeDto;
-import christmas.dto.DateDto;
-import christmas.dto.PaymentDto;
-import christmas.dto.benefitDto.BenefitsDto;
-import christmas.dto.orderMenuDto.OrderDto;
+import christmas.dto.*;
+import christmas.dto.BenefitDto;
+import christmas.dto.OrderMenuDto;
 import christmas.message.EventNoticeMessage;
 
 import java.util.List;
@@ -21,10 +19,7 @@ public class PromotionService {
     }
 
     public void createOrder(Map<String, Integer> orderMenuAndCount) {
-        List<OrderMenu> orderMenus = orderMenuAndCount.keySet().stream()
-                .map(menuName -> new OrderMenu(menuName, orderMenuAndCount.get(menuName)))
-                .toList();
-        this.order = new Order(orderMenus);
+        this.order = new Order(orderMenuAndCount);
     }
 
     public void validateEventApplicability() {
@@ -37,23 +32,26 @@ public class PromotionService {
         this.benefit = new Benefit(order, date);
     }
 
-    public DateDto createDateDto() {
-        return new DateDto(date);
+    public ResultDto createEventResultDto() {
+        List<OrderMenuDto> orderMenuDtos = order.getOrderMenus().stream()
+                .map(orderMenu -> new OrderMenuDto(orderMenu.getMenu().getMenuName(), orderMenu.getQuantity()))
+                .toList();
+
+        List<BenefitDto> BenefitDtos = benefit.getEvents().stream()
+                .map(event -> new BenefitDto(event.getEventName(), event.getBenefitAmount(order, date)))
+                .toList();
+
+        return new ResultDto(date.getDate(), orderMenuDtos, order.getTotalOrderPrice(), benefit.hasGift(),
+                BenefitDtos, benefit.getTotalBenefitAmount(),
+                order.getTotalOrderPrice() - benefit.getTotalDiscountAmount(),
+                benefit.getBadge().getBadgeName());
     }
 
-    public OrderDto createOrderDto() {
-        return new OrderDto(order);
-    }
+    public ResultDto createNonEventResultDto() {
+        List<OrderMenuDto> orderMenuDtos = order.getOrderMenus().stream()
+                .map(orderMenu -> new OrderMenuDto(orderMenu.getMenu().getMenuName(), orderMenu.getQuantity()))
+                .toList();
 
-    public BenefitsDto createBenefitsDto() {
-        return new BenefitsDto(benefit, order, date);
-    }
-
-    public PaymentDto createPaymentDto() {
-        return new PaymentDto(order, benefit);
-    }
-
-    public BadgeDto createBadgeDto() {
-        return new BadgeDto(benefit);
+        return new ResultDto(date.getDate(), orderMenuDtos, order.getTotalOrderPrice());
     }
 }

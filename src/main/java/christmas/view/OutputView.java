@@ -1,32 +1,56 @@
 package christmas.view;
 
-import christmas.dto.BadgeDto;
-import christmas.dto.DateDto;
-import christmas.dto.PaymentDto;
-import christmas.dto.benefitDto.BenefitsDto;
-import christmas.dto.orderMenuDto.OrderDto;
+import christmas.dto.*;
 
-public interface OutputView {
+public class OutputView {
 
-    void printErrorMessage(String errorMessage);
-    void printEventOrderResult(DateDto dateDto, OrderDto orderDto, BenefitsDto benefitsDto, PaymentDto paymentDto, BadgeDto badgeDto);
-    void printNonEventOrderResult(DateDto dateDto, OrderDto orderDto);
+    private final ResultMessage resultMessage;
 
-    void printOutputStartMessage(DateDto dateDto);
-
-    void printOrder(OrderDto orderDto);
-
-    void printBenefits(BenefitsDto benefitsDto);
-
-    void printPayment(PaymentDto paymentDto);
-
-    void printBadge(BadgeDto badgeDto);
-
-    default void printMessage(String message) {
-        System.out.println(message);
+    private OutputView(ResultMessage resultMessage) {
+        this.resultMessage = resultMessage;
     }
 
-    default void printNewLine() {
+    private static class ConsoleOutputViewHolder {
+        private static OutputView outputView = new OutputView(ResultMessage.getInstance());
+    }
+
+    public static OutputView getInstance() {
+        return ConsoleOutputViewHolder.outputView;
+    }
+
+    public void printErrorMessage(String errorMessage) {
+        System.out.println(errorMessage);
+    }
+
+    public void printOrderResult(ResultDto resultDto) {
+        System.out.println(resultMessage.getResultStartMessage(resultDto));
         System.out.println();
+
+        System.out.println("<주문 메뉴>");
+        System.out.println(resultMessage.getOrderMenusMessage(resultDto));
+        System.out.println();
+
+        System.out.println("<할인 전 총주문 금액>");
+        System.out.println(resultMessage.getTotalOrderPrice(resultDto));
+        System.out.println();
+
+        System.out.println("<증정 메뉴>");
+        System.out.println(resultMessage.getGiftMessage(resultDto));
+        System.out.println();
+
+        System.out.println("<혜택 내역>");
+        System.out.println(resultMessage.getBenefits(resultDto));
+        System.out.println();
+
+        System.out.println("<총혜택 금액>");
+        System.out.println(resultMessage.getTotalBenefitAmount(resultDto));
+        System.out.println();
+
+        System.out.println("<할인 후 예상 결제 금액>");
+        System.out.println(resultMessage.getPayment(resultDto));
+        System.out.println();
+
+        System.out.println("<12월 이벤트 배지>");
+        System.out.println(resultMessage.getBadge(resultDto));
     }
 }

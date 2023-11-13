@@ -23,19 +23,17 @@ public class PromotionController {
 
     public void start() {
         readUserInput();
-
         try {
-            validateEventApplicability();
+            promotionService.validateEventApplicability();
             applyPromotion();
-            printEventOrderResult();
+            outputView.printOrderResult(promotionService.createEventResultDto());
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e.getMessage());
-            printNonEventOrderResult();
+            outputView.printOrderResult(promotionService.createNonEventResultDto());
         }
     }
 
     private void readUserInput() {
-        inputView.printInputStartMessage();
         readDate();
         readOrder();
     }
@@ -60,24 +58,7 @@ public class PromotionController {
         }
     }
 
-    private void validateEventApplicability() {
-        promotionService.validateEventApplicability();
-    }
-
     public void applyPromotion() {
         promotionService.applyPromotion();
-    }
-
-    public void printEventOrderResult() {
-        outputView.printOutputStartMessage(promotionService.createDateDto());
-        outputView.printOrder(promotionService.createOrderDto());
-        outputView.printBenefits(promotionService.createBenefitsDto());
-        outputView.printPayment(promotionService.createPaymentDto());
-        outputView.printBadge(promotionService.createBadgeDto());
-    }
-
-    public void printNonEventOrderResult() {
-        outputView.printNonEventOrderResult(promotionService.createDateDto(),
-                promotionService.createOrderDto());
     }
 }

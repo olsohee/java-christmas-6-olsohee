@@ -1,4 +1,4 @@
-package christmas.dto.orderMenuDto;
+package christmas.dto;
 
 public class OrderMenuDto {
 
