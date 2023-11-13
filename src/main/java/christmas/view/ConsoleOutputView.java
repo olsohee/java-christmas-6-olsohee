@@ -23,6 +23,43 @@ public class ConsoleOutputView implements OutputView {
     }
 
     @Override
+    public void printEventOrderResult(DateDto dateDto, OrderDto orderDto, BenefitsDto benefitsDto, PaymentDto paymentDto, BadgeDto badgeDto) {
+        printOutputStartMessage(dateDto);
+        printOrder(orderDto);
+        printBenefits(benefitsDto);
+        printPayment(paymentDto);
+        printBadge(badgeDto);
+    }
+
+    @Override
+    public void printNonEventOrderResult(DateDto dateDto, OrderDto orderDto) {
+        printOutputStartMessage(dateDto);
+        printOrder(orderDto);
+        printNonEvent(dateDto, orderDto);
+    }
+
+    private void printNonEvent(DateDto dateDto, OrderDto orderDto) {
+        printMessage("<증정 메뉴>");
+        printMessage("없음");
+        printNewLine();
+
+        printMessage("<혜택 내역>");
+        printMessage("없음");
+        printNewLine();
+
+        printMessage("<총혜택 금액>");
+        printMessage("0원");
+        printNewLine();
+
+        printMessage("<할인 후 예상 결제 금액>");
+        printMessage(orderDto.getTotalOrderPrice() + "원");
+        printNewLine();
+
+        printMessage("<12월 이벤트 배지>");
+        printMessage("없음");
+    }
+
+    @Override
     public void printOutputStartMessage(DateDto dateDto) {
         printMessage(outputMessage.getStartMessage(dateDto.getDate()));
         printNewLine();

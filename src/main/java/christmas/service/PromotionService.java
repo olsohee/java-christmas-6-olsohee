@@ -6,6 +6,7 @@ import christmas.dto.DateDto;
 import christmas.dto.PaymentDto;
 import christmas.dto.benefitDto.BenefitsDto;
 import christmas.dto.orderMenuDto.OrderDto;
+import christmas.message.EventNoticeMessage;
 
 import java.util.List;
 import java.util.Map;
@@ -26,10 +27,15 @@ public class PromotionService {
         this.order = new Order(orderMenus);
     }
 
+    public void validateEventApplicability() {
+        if (!order.isApplicableEvent()) {
+            throw new IllegalArgumentException(EventNoticeMessage.NOT_APPLICABLE_EVENT.getErrorMessage());
+        }
+    }
+
     public void applyPromotion() {
         this.benefit = new Benefit(order, date);
     }
-
 
     public DateDto createDateDto() {
         return new DateDto(date);

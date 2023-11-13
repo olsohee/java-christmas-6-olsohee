@@ -1,5 +1,6 @@
 package christmas.controller;
 
+import christmas.dto.benefitDto.BenefitsDto;
 import christmas.service.PromotionService;
 import christmas.validate.InputValidator;
 import christmas.view.InputView;
@@ -21,8 +22,20 @@ public class PromotionController {
         this.promotionService = new PromotionService();
     }
 
-    public void readUserInput() {
-        inputView.printStartMessage();
+    public void start() {
+        readUserInput();
+
+        try {
+            validateEventApplicability();
+            applyPromotion();
+            printEventOrderResult();
+        } catch (IllegalArgumentException e) {
+            printNonEventOrderResult();
+        }
+    }
+
+    private void readUserInput() {
+        inputView.printInputStartMessage();
         readDate();
         readOrder();
     }
@@ -37,15 +50,24 @@ public class PromotionController {
         promotionService.createOrder(orderMenuAndCount);
     }
 
+    private void validateEventApplicability() {
+        promotionService.validateEventApplicability();
+    }
+
     public void applyPromotion() {
         promotionService.applyPromotion();
     }
 
-    public void printOrderResult() {
-        outputView.printStartMessage(promotionService.createDateDto());
+    public void printEventOrderResult() {
+        outputView.printOutputStartMessage(promotionService.createDateDto());
         outputView.printOrder(promotionService.createOrderDto());
         outputView.printBenefits(promotionService.createBenefitsDto());
         outputView.printPayment(promotionService.createPaymentDto());
         outputView.printBadge(promotionService.createBadgeDto());
+    }
+
+    public void printNonEventOrderResult() {
+        outputView.printNonEventOrderResult(promotionService.createDateDto(),
+                promotionService.createOrderDto());
     }
 }
