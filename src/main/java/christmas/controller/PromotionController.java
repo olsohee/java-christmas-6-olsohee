@@ -1,6 +1,5 @@
 package christmas.controller;
 
-import christmas.dto.benefitDto.BenefitsDto;
 import christmas.service.PromotionService;
 import christmas.validate.InputValidator;
 import christmas.view.InputView;
@@ -30,6 +29,7 @@ public class PromotionController {
             applyPromotion();
             printEventOrderResult();
         } catch (IllegalArgumentException e) {
+            outputView.printErrorMessage(e.getMessage());
             printNonEventOrderResult();
         }
     }
@@ -41,13 +41,23 @@ public class PromotionController {
     }
 
     private void readDate() {
-        int date = inputValidator.convertDateInputToInt(inputView.readDate());
-        promotionService.createDate(date);
+        try {
+            int date = inputValidator.convertDateInputToInt(inputView.readDate());
+            promotionService.createDate(date);
+        } catch (IllegalArgumentException e) {
+            outputView.printErrorMessage(e.getMessage());
+            readDate();
+        }
     }
 
     private void readOrder() {
-        Map<String, Integer> orderMenuAndCount = inputValidator.convertOrderInputToMap(inputView.readOrder());
-        promotionService.createOrder(orderMenuAndCount);
+        try {
+            Map<String, Integer> orderMenuAndCount = inputValidator.convertOrderInputToMap(inputView.readOrder());
+            promotionService.createOrder(orderMenuAndCount);
+        } catch (IllegalArgumentException e) {
+            outputView.printErrorMessage(e.getMessage());
+            readOrder();
+        }
     }
 
     private void validateEventApplicability() {

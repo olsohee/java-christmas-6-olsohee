@@ -8,6 +8,7 @@ import christmas.dto.orderMenuDto.OrderDto;
 
 public interface OutputView {
 
+    void printErrorMessage(String errorMessage);
     void printEventOrderResult(DateDto dateDto, OrderDto orderDto, BenefitsDto benefitsDto, PaymentDto paymentDto, BadgeDto badgeDto);
     void printNonEventOrderResult(DateDto dateDto, OrderDto orderDto);
 

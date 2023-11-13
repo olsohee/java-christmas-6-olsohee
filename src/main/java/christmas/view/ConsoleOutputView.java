@@ -23,6 +23,11 @@ public class ConsoleOutputView implements OutputView {
     }
 
     @Override
+    public void printErrorMessage(String errorMessage) {
+        printMessage(errorMessage);
+    }
+
+    @Override
     public void printEventOrderResult(DateDto dateDto, OrderDto orderDto, BenefitsDto benefitsDto, PaymentDto paymentDto, BadgeDto badgeDto) {
         printOutputStartMessage(dateDto);
         printOrder(orderDto);
