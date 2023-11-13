@@ -5,5 +5,5 @@ public enum Category {
     APPETIZER,
     MAIN,
     DESERT,
-    DRINT
+    DRINK
 }

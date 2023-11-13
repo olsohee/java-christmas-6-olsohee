@@ -1,6 +1,7 @@
 package christmas.domain;
 
 import christmas.message.ErrorMessage;
+import christmas.message.EventNoticeMessage;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class Order {
 
     private void validate(List<OrderMenu> orderMenus) {
         validateCount(orderMenus);
+        validateOnlyDrink(orderMenus);
     }
 
     private void validateCount(List<OrderMenu> orderMenus) {
@@ -26,6 +28,15 @@ public class Order {
 
         if(totalOrderAmount < 1) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER_INPUT.getErrorMessage());
+        }
+    }
+
+    private void validateOnlyDrink(List<OrderMenu> orderMenus) {
+        int drinkMenuCount = (int) orderMenus.stream()
+                .filter(orderMenu -> orderMenu.isDrinkMenu())
+                .count();
+        if(drinkMenuCount == orderMenus.size()) {
+            throw new IllegalArgumentException(EventNoticeMessage.IMPOSSIBLE_ORDER_BY_ONLY_DRINK.getErrorMessage());
         }
     }
 

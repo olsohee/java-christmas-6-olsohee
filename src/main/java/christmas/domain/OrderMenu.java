@@ -17,6 +17,10 @@ public class OrderMenu {
         return menu.getPrice() * quantity;
     }
 
+    public boolean isDrinkMenu() {
+        return menu.getCategory().equals(Category.DRINK);
+    }
+
     public boolean isDessertMenu() {
         return menu.getCategory().equals(Category.DESERT);
     }

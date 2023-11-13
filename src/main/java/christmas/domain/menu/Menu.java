@@ -15,9 +15,9 @@ public enum Menu {
     CHRISTMAS_PASTA("크리스마스파스타", Category.MAIN, 25000),
     CHOCO_CAKE("초코케이크", Category.DESERT, 15000),
     ICE_CREAM("아이스크림", Category.DESERT, 5000),
-    ZERO_COKE("제로콜라", Category.DRINT, 3000),
-    RED_WINE("레드와인", Category.DRINT, 60000),
-    CHAMPAGNE("샴페인", Category.DRINT, 25000)
+    ZERO_COKE("제로콜라", Category.DRINK, 3000),
+    RED_WINE("레드와인", Category.DRINK, 60000),
+    CHAMPAGNE("샴페인", Category.DRINK, 25000)
     ;
 
     private final String menuName;
