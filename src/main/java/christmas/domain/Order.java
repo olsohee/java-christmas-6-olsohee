@@ -1,6 +1,6 @@
 package christmas.domain;
 
-import christmas.ErrorMessage;
+import christmas.message.ErrorMessage;
 
 import java.util.List;
 
@@ -10,18 +10,22 @@ public class Order {
     private int totalOrderPrice;
 
     public Order(List<OrderMenu> orderMenus) {
-        validate();
+        validate(orderMenus);
         this.orderMenus = orderMenus;
         this.totalOrderPrice = calculateTotalOrderPrice();
     }
 
-    private void validate() {
+    private void validate(List<OrderMenu> orderMenus) {
+        validateCount(orderMenus);
+    }
+
+    private void validateCount(List<OrderMenu> orderMenus) {
         int totalOrderAmount = orderMenus.stream()
                 .mapToInt(orderMenu -> orderMenu.getQuantity())
                 .sum();
 
         if(totalOrderAmount < 1) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER.getErrorMessage());
+            throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER_INPUT.getErrorMessage());
         }
     }
 
@@ -29,6 +33,13 @@ public class Order {
         return orderMenus.stream()
                 .mapToInt(orderMenu -> orderMenu.calculateOrderPrice())
                 .sum();
+    }
+
+    public boolean isApplicableEvent() {
+        int totalOrderPrice = orderMenus.stream()
+                .mapToInt(orderMenu -> orderMenu.calculateOrderPrice())
+                .sum();
+        return (totalOrderPrice >= 10000);
     }
 
     public boolean hasDesertMenu() {

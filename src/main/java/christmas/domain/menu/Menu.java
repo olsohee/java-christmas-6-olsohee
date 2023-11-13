@@ -1,6 +1,6 @@
 package christmas.domain.menu;
 
-import christmas.ErrorMessage;
+import christmas.message.ErrorMessage;
 
 import java.util.Arrays;
 
@@ -34,7 +34,7 @@ public enum Menu {
         return Arrays.stream(values())
                 .filter(menu -> menu.menuName.equals(menuName))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_ORDER.getErrorMessage()));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_ORDER_INPUT.getErrorMessage()));
     }
 
     public String getMenuName() {
