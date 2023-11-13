@@ -17,17 +17,26 @@ public class Order {
     }
 
     private void validate(List<OrderMenu> orderMenus) {
-        validateCount(orderMenus);
+        validateMinCount(orderMenus);
+        validateMaxCount(orderMenus);
         validateOnlyDrink(orderMenus);
     }
 
-    private void validateCount(List<OrderMenu> orderMenus) {
+    private void validateMinCount(List<OrderMenu> orderMenus) {
         int totalOrderAmount = orderMenus.stream()
-                .mapToInt(orderMenu -> orderMenu.getQuantity())
-                .sum();
+                .mapToInt(orderMenu -> orderMenu.getQuantity()).sum();
 
-        if(totalOrderAmount < 1) {
+        if (totalOrderAmount < 1) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER_INPUT.getErrorMessage());
+        }
+    }
+
+    private void validateMaxCount(List<OrderMenu> orderMenus) {
+        int totalOrderAmount = orderMenus.stream()
+                .mapToInt(orderMenu -> orderMenu.getQuantity()).sum();
+
+        if (totalOrderAmount > 20) {
+            throw new IllegalArgumentException(EventNoticeMessage.IMPOSSIBLE_ORDER_BY_MAX_ORDER_COUNT.getErrorMessage());
         }
     }
 
@@ -35,7 +44,7 @@ public class Order {
         int drinkMenuCount = (int) orderMenus.stream()
                 .filter(orderMenu -> orderMenu.isDrinkMenu())
                 .count();
-        if(drinkMenuCount == orderMenus.size()) {
+        if (drinkMenuCount == orderMenus.size()) {
             throw new IllegalArgumentException(EventNoticeMessage.IMPOSSIBLE_ORDER_BY_ONLY_DRINK.getErrorMessage());
         }
     }
