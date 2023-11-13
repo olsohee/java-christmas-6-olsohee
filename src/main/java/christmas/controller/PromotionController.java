@@ -21,7 +21,7 @@ public class PromotionController {
         this.promotionService = new PromotionService();
     }
 
-    public void start() {
+    public void run() {
         readUserInput();
         try {
             promotionService.validateEventApplicability();
@@ -34,27 +34,35 @@ public class PromotionController {
     }
 
     private void readUserInput() {
-        readDate();
-        readOrder();
+        boolean flag;
+        do {
+            flag = readDate();
+        } while (!flag);
+
+        do {
+            readOrder();
+        } while (!flag);
     }
 
-    private void readDate() {
+    private boolean readDate() {
         try {
             int date = inputValidator.convertDateInputToInt(inputView.readDate());
             promotionService.createDate(date);
+            return true;
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e.getMessage());
-            readDate();
+            return false;
         }
     }
 
-    private void readOrder() {
+    private boolean readOrder() {
         try {
             Map<String, Integer> orderMenuAndCount = inputValidator.convertOrderInputToMap(inputView.readOrder());
             promotionService.createOrder(orderMenuAndCount);
+            return true;
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e.getMessage());
-            readOrder();
+            return false;
         }
     }
 
