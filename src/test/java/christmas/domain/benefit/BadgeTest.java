@@ -1,4 +1,4 @@
-package christmas.domain;
+package christmas.domain.benefit;
 
 import christmas.domain.benefit.Badge;
 import org.assertj.core.api.Assertions;
