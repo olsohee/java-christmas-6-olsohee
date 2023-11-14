@@ -24,6 +24,7 @@ public enum Event {
     GIFT("증정 이벤트",
             (date, orderMenus, totalOrderPrice) -> totalOrderPrice.isApplicableGiftEvent(),
             (date, orderMenus) -> Menu.CHAMPAGNE.getPrice());
+
     private final String eventName;
     private final TriPredicate<Date, OrderMenus, TotalOrderPrice> isApplicable;
     private final BiFunction<Date, OrderMenus, Integer> getBenefitAmount;
