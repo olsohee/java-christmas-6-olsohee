@@ -3,7 +3,6 @@ package christmas.validate;
 import christmas.message.ErrorMessage;
 
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class InputValidator {
@@ -29,16 +28,10 @@ public class InputValidator {
 
     public Map<String, Integer> convertOrderInputToMap(String orderInput) {
         validateDuplicateMenu(orderInput);
-
-        try {
-            Map<String, Integer> orderMenuAndCount = Pattern.compile(",")
-                    .splitAsStream(orderInput.trim())
-                    .map(order -> order.split("-", 2))
-                    .collect(Collectors.toMap(orderSplit -> orderSplit[0].trim(), orderSplit -> Integer.parseInt(orderSplit[1].trim())));
-            return orderMenuAndCount;
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER_INPUT.getErrorMessage());
-        }
+        return Arrays.stream(orderInput.split(","))
+                .map(order -> order.split("-", 2))
+                .collect(Collectors.toMap(orderSplit -> orderSplit[0].trim(),
+                        orderSplit -> convertOrderCountInputToInt(orderSplit[1].trim())));
     }
 
     private void validateDuplicateMenu(String orderInput) {
@@ -51,6 +44,14 @@ public class InputValidator {
                 .count();
 
         if(count != orderMenus.size()) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER_INPUT.getErrorMessage());
+        }
+    }
+
+    private Integer convertOrderCountInputToInt(String orderCountInput) {
+        try {
+            return Integer.parseInt(orderCountInput);
+        } catch (NumberFormatException e) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER_INPUT.getErrorMessage());
         }
     }
