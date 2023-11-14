@@ -33,7 +33,7 @@ public class ResultMessage {
 
     public String getOrderMenusMessage(ResultDto resultDto) {
         List<String> orderMenus = resultDto.orderMenuDtos().stream()
-                .map(orderMenu -> String.format(ORDER_MENU_AND_COUNT, orderMenu.getMenuName(), orderMenu.getQuantity()))
+                .map(orderMenu -> String.format(ORDER_MENU_AND_COUNT, orderMenu.menuName(), orderMenu.quantity()))
                 .toList();
 
         return String.join(NEW_LINE , orderMenus);
@@ -51,17 +51,17 @@ public class ResultMessage {
     }
 
     public String getBenefits(ResultDto resultDto) {
-        if(resultDto.benefitDtos() == null) {
+        if(resultDto.eventDtos() == null) {
             return NONE;
         }
-        List<String> benefits = resultDto.benefitDtos().stream()
-                .map(benefit -> String.format(BENEFITS, benefit.getEventName(), decimalFormat.format(benefit.getBenefitAmount())))
+        List<String> benefits = resultDto.eventDtos().stream()
+                .map(benefit -> String.format(BENEFITS, benefit.eventName(), decimalFormat.format(benefit.benefitAmount())))
                 .toList();
         return String.join(NEW_LINE, benefits);
     }
 
     public String getTotalBenefitAmount(ResultDto resultDto) {
-        if(resultDto.totalBenefitAmount() == 0) {
+        if(resultDto.totalBenefitAmount() == null) {
             return NONE;
         }
         return String.format(TOTAL_BENEFIT_AMOUNT, decimalFormat.format(resultDto.totalBenefitAmount()));

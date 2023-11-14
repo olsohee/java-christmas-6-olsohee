@@ -7,13 +7,13 @@ public record ResultDto(
         List<OrderMenuDto> orderMenuDtos,
         int totalOrderPrice,
         boolean hasGift,
-        List<BenefitDto> benefitDtos,
-        int totalBenefitAmount,
+        List<EventDto> eventDtos,
+        Integer totalBenefitAmount,
         int payment,
         String badgeName
 ) {
-
     public ResultDto(int date, List<OrderMenuDto> orderMenuDtos, int totalOrderPrice) {
-        this(date, orderMenuDtos, totalOrderPrice, false, null, 0, totalOrderPrice, "없음");
+        this(date, orderMenuDtos, totalOrderPrice, false,
+                null, null, totalOrderPrice, "없음");
     }
 }
