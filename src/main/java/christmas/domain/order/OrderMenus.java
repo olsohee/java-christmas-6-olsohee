@@ -52,7 +52,7 @@ public class OrderMenus {
     }
 
     public int getWeekdayEventBenefitAmount() {
-        return getMenuCount(Category.DESERT) * 2023;
+        return getMenuCount(Category.DESSERT) * 2023;
     }
 
     public int getWeekendEventBenefitAmount() {

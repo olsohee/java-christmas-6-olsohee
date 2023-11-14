@@ -1,6 +1,5 @@
 package christmas.domain.order;
 
-import christmas.domain.order.Date;
 import christmas.message.ErrorMessage;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

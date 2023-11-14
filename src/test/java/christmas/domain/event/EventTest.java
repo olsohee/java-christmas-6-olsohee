@@ -1,11 +1,9 @@
 package christmas.domain.event;
 
-import christmas.domain.event.Event;
 import christmas.domain.menu.Menu;
 import christmas.domain.order.Date;
 import christmas.domain.order.OrderMenus;
 import christmas.domain.order.TotalOrderPrice;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class EventTest {
 
@@ -40,9 +40,9 @@ class EventTest {
         // given
         List<Event> events = Event.getApplicableEvents(date, orderMenus, totalOrderPrice);
 
-        // then
-        Assertions.assertThat(events.size()).isEqualTo(4);
-        Assertions.assertThat(events.containsAll(List.of(Event.CHRISTMAS, Event.WEEKDAY, Event.SPECIAL, Event.GIFT)));
+        // when
+        assertThat(events.size()).isEqualTo(4);
+        assertThat(events.containsAll(List.of(Event.CHRISTMAS, Event.WEEKDAY, Event.SPECIAL, Event.GIFT)));
     }
 
     @DisplayName("적용되는 이벤트 리스트를 통해 총혜택 금액 반환")
@@ -57,7 +57,7 @@ class EventTest {
                 .sum();
 
         // then
-        Assertions.assertThat(totalBenefitAmount)
+        assertThat(totalBenefitAmount)
                 .isEqualTo(date.getChristmasEventBenefitAmount()
                         + orderMenus.getWeekdayEventBenefitAmount()
                         + 1000

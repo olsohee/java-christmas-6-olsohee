@@ -14,7 +14,7 @@ public enum Event {
             (date, orderMenus) -> date.getChristmasEventBenefitAmount()),
 
     WEEKDAY("평일 할인",
-            (date, orderMenus, totalOrderPrice) -> orderMenus.checkCategory(Category.DESERT) && date.isApplicableWeekdayEvent(),
+            (date, orderMenus, totalOrderPrice) -> orderMenus.checkCategory(Category.DESSERT) && date.isApplicableWeekdayEvent(),
             (date, orderMenus) -> orderMenus.getWeekdayEventBenefitAmount()),
     WEEKEND("주말 할인",
             (date, orderMenus, totalOrderPrice) -> orderMenus.checkCategory(Category.MAIN) && date.isApplicableWeekendEvent(),

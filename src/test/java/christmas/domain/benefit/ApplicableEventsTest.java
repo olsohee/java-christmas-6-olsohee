@@ -1,24 +1,28 @@
 package christmas.domain.benefit;
 
 import christmas.domain.event.Event;
+import christmas.domain.event.EventDate;
 import christmas.domain.menu.Menu;
 import christmas.domain.order.Date;
 import christmas.domain.order.OrderMenus;
 import christmas.domain.order.TotalOrderPrice;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ApplicableEventsTest {
 
     private Date date;
     private OrderMenus orderMenus;
     private TotalOrderPrice totalOrderPrice;
+    private ApplicableEvents applicableEvents;
 
     @BeforeEach
     void init() {
@@ -32,17 +36,14 @@ class ApplicableEventsTest {
         orderMenus = new OrderMenus(orderMenuAndCount);
 
         totalOrderPrice = new TotalOrderPrice(orderMenus.calculateTotalOrderPrice());
+
+        applicableEvents = new ApplicableEvents(Event.getApplicableEvents(date, orderMenus, totalOrderPrice));
     }
 
-    @DisplayName("적용되는 이벤트 리스트를 통해 총혜택 금액 반환")
+    @DisplayName("총혜택 금액 계산")
     @Test
     void calculateTotalBenefitAmount() {
-        // given
-        List<Event> events = Event.getApplicableEvents(date, orderMenus, totalOrderPrice);
-        ApplicableEvents applicableEvents = new ApplicableEvents(events);
-
-        // then
-        Assertions.assertThat(applicableEvents.calculateTotalBenefitAmount(date, orderMenus))
+        assertThat(applicableEvents.calculateTotalBenefitAmount(date, orderMenus))
                 .isEqualTo(date.getChristmasEventBenefitAmount()
                         + orderMenus.getWeekdayEventBenefitAmount()
                         + 1000
@@ -52,11 +53,6 @@ class ApplicableEventsTest {
     @DisplayName("증정 이벤트가 포함되는지 확인")
     @Test
     void containGiftEvent() {
-        // given
-        List<Event> events = Event.getApplicableEvents(date, orderMenus, totalOrderPrice);
-        ApplicableEvents applicableEvents = new ApplicableEvents(events);
-
-        Assertions.assertThat(applicableEvents.containGiftEvent())
-                .isTrue();
+        assertThat(applicableEvents.containGiftEvent()).isTrue();
     }
 }
