@@ -5,7 +5,7 @@ import java.util.stream.IntStream;
 
 public enum EventDate {
 
-    CHRISTMAS(List.of(IntStream.range(1, 26))),
+    CHRISTMAS(IntStream.range(1, 26).boxed().toList()),
     WEEKDAY(List.of(7, 1, 2, 3, 4)),
     WEEKEND(List.of(5, 6)),
     SPECIAL(List.of(3, 10, 17, 24, 25, 31));
