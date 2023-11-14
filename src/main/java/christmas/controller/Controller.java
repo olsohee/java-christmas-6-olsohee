@@ -1,24 +1,24 @@
 package christmas.controller;
 
-import christmas.service.PromotionService;
+import christmas.service.OrderService;
 import christmas.validate.InputValidator;
 import christmas.view.InputView;
 import christmas.view.OutputView;
 
 import java.util.Map;
 
-public class PromotionController {
+public class Controller {
 
     private final InputView inputView;
     private final OutputView outputView;
     private final InputValidator inputValidator;
-    private final PromotionService promotionService;
+    private final OrderService orderService;
 
-    public PromotionController(InputView inputView, OutputView outputView, InputValidator inputValidator) {
+    public Controller(InputView inputView, OutputView outputView, InputValidator inputValidator) {
         this.inputView = inputView;
         this.outputView = outputView;
         this.inputValidator = inputValidator;
-        this.promotionService = new PromotionService();
+        this.orderService = new OrderService();
     }
 
     public void run() {
@@ -26,12 +26,11 @@ public class PromotionController {
         generateDate();
         generateOrder();
         try {
-            promotionService.validateEventApplicability();
-            promotionService.applyPromotion();
-            outputView.printOrderResult(promotionService.createEventResultDto());
+            orderService.startPromotion();
+            outputView.printOrderResult(orderService.createEventResultDto(true));
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e.getMessage());
-            outputView.printOrderResult(promotionService.createNonEventResultDto());
+            outputView.printOrderResult(orderService.createEventResultDto(false));
         }
     }
 
@@ -45,7 +44,7 @@ public class PromotionController {
     private boolean readDate() {
         try {
             int date = inputValidator.convertDateInputToInt(inputView.readDate());
-            promotionService.initiateDate(date);
+            orderService.initiateDate(date);
             return false;
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e.getMessage());
@@ -63,7 +62,7 @@ public class PromotionController {
     private boolean readOrder() {
         try {
             Map<String, Integer> orderNameAndCount = inputValidator.convertOrderInputToMap(inputView.readOrder());
-            promotionService.initiateOrder(orderNameAndCount);
+            orderService.initiateOrder(orderNameAndCount);
             return false;
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e.getMessage());

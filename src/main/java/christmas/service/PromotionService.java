@@ -1,69 +1,47 @@
 package christmas.service;
 
-import christmas.domain.benefit.*;
+import christmas.domain.benefit.ApplicableEvents;
+import christmas.domain.benefit.Badge;
 import christmas.domain.event.Event;
 import christmas.domain.menu.Menu;
-import christmas.domain.order.*;
-import christmas.dto.*;
-import christmas.message.NoticeMessage;
+import christmas.domain.order.Date;
+import christmas.domain.order.OrderMenus;
+import christmas.domain.order.TotalOrderPrice;
+import christmas.dto.EventDto;
+import christmas.dto.PromotionDto;
 
 import java.util.List;
-import java.util.Map;
 
 public class PromotionService {
-    private Date date;
-    private OrderMenus orderMenus;
-    private TotalOrderPrice totalOrderPrice;
+
+    private final Date date;
+    private final OrderMenus orderMenus;
+    private final TotalOrderPrice totalOrderPrice;
     private ApplicableEvents applicableEvents;
-    private int totalBenefitAmount;
-    private int totalDiscountAmount;
     private Badge badge;
 
-    public void initiateDate(int date) {
-        this.date = new Date(date);
+    public PromotionService(Date date, OrderMenus orderMenus, TotalOrderPrice totalOrderPrice) {
+        this.date = date;
+        this.orderMenus = orderMenus;
+        this.totalOrderPrice = totalOrderPrice;
     }
 
-    public void initiateOrder(Map<String, Integer> orderNameAndCount) {
-        orderMenus = new OrderMenus(orderNameAndCount);
-        totalOrderPrice = new TotalOrderPrice(orderMenus.calculateTotalOrderPrice());
+    public void startPromotion() {
+        applicableEvents = new ApplicableEvents(Event.getApplicableEvents(this.date, this.orderMenus, this.totalOrderPrice));
+        badge = Badge.getBadge(applicableEvents.calculateTotalBenefitAmount(this.date, this.orderMenus));
     }
 
-    public void validateEventApplicability() {
-        if (!totalOrderPrice.isApplicableEvent()) {
-            throw new IllegalArgumentException(NoticeMessage.NOT_APPLICABLE_EVENT.getNoticeMessage());
-        }
-    }
-
-    public void applyPromotion() {
-        applicableEvents = new ApplicableEvents(Event.getApplicableEvents(date, orderMenus, totalOrderPrice));
-        totalBenefitAmount = applicableEvents.calculateTotalBenefitAmount(date, orderMenus);
-        totalDiscountAmount = totalBenefitAmount;
-        if (applicableEvents.containGiftEvent()) {
-            totalDiscountAmount -= Menu.CHAMPAGNE.getPrice();
-        }
-        badge = Badge.getBadge(totalBenefitAmount);
-    }
-
-    public ResultDto createEventResultDto() {
-        List<OrderMenuDto> orderMenuDtos = createOrderMenuDtos();
+    public PromotionDto createPromotionDto() {
         List<EventDto> eventDtos = applicableEvents.getEvents().stream()
                 .map(event -> new EventDto(event.getEventName(), event.getBenefitAmount(date, orderMenus)))
                 .toList();
-        int payment = totalOrderPrice.getTotalOrderPrice() - totalDiscountAmount;
+        int totalBenefitAmount = applicableEvents.calculateTotalBenefitAmount(this.date, this.orderMenus);
+        int payment = totalOrderPrice.getTotalOrderPrice() - totalBenefitAmount;
+        if (applicableEvents.containGiftEvent()) {
+            payment += Menu.CHAMPAGNE.getPrice();
+        }
 
-        return new ResultDto(date.getDate(), orderMenuDtos, totalOrderPrice.getTotalOrderPrice(),
-                applicableEvents.containGiftEvent(), eventDtos, totalBenefitAmount,
-                payment, badge.getBadgeName());
-    }
-
-    public ResultDto createNonEventResultDto() {
-        List<OrderMenuDto> orderMenuDtos = createOrderMenuDtos();
-        return new ResultDto(date.getDate(), orderMenuDtos, totalOrderPrice.getTotalOrderPrice());
-    }
-
-    private List<OrderMenuDto> createOrderMenuDtos() {
-        return orderMenus.getOrderMenus().stream()
-                .map(orderMenu -> new OrderMenuDto(orderMenu.getMenu().getMenuName(), orderMenu.getQuantity()))
-                .toList();
+        return new PromotionDto(applicableEvents.containGiftEvent(), eventDtos,
+                totalBenefitAmount, payment, badge.getBadgeName());
     }
 }
