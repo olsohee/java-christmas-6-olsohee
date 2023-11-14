@@ -27,8 +27,8 @@ public class PromotionService {
     }
 
     public void startPromotion() {
-        applicableEvents = new ApplicableEvents(Event.getApplicableEvents(this.date, this.orderMenus, this.totalOrderPrice));
-        badge = Badge.getBadge(applicableEvents.calculateTotalBenefitAmount(this.date, this.orderMenus));
+        applicableEvents = new ApplicableEvents(Event.getApplicableEvents(date, orderMenus, totalOrderPrice));
+        badge = Badge.getBadge(applicableEvents.calculateTotalBenefitAmount(date, orderMenus));
     }
 
     public PromotionDto createPromotionDto() {

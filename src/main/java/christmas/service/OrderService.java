@@ -39,7 +39,6 @@ public class OrderService {
         if (isApplicableEvent) {
             promotionDto = promotionService.createPromotionDto();
         }
-
         List<OrderMenuDto> orderMenuDtos = createOrderMenuDtos();
         return new ResultDto(date.getDate(), orderMenuDtos, totalOrderPrice.getTotalOrderPrice(), promotionDto);
     }
