@@ -22,10 +22,12 @@ public class PromotionController {
     }
 
     public void run() {
-        readUserInput();
+        outputView.printStartMessage();
+        generateDate();
+        generateOrder();
         try {
             promotionService.validateEventApplicability();
-            applyPromotion();
+            promotionService.applyPromotion();
             outputView.printOrderResult(promotionService.createEventResultDto());
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e.getMessage());
@@ -33,40 +35,39 @@ public class PromotionController {
         }
     }
 
-    private void readUserInput() {
-        boolean flag;
+    private void generateDate() {
+        boolean containException;
         do {
-            flag = readDate();
-        } while (!flag);
-
-        do {
-            readOrder();
-        } while (!flag);
+            containException = readDate();
+        } while (containException);
     }
 
     private boolean readDate() {
         try {
             int date = inputValidator.convertDateInputToInt(inputView.readDate());
-            promotionService.createDate(date);
-            return true;
+            promotionService.initiateDate(date);
+            return false;
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e.getMessage());
-            return false;
+            return true;
         }
+    }
+
+    private void generateOrder() {
+        boolean containException;
+        do {
+            containException = readOrder();
+        } while (containException);
     }
 
     private boolean readOrder() {
         try {
-            Map<String, Integer> orderMenuAndCount = inputValidator.convertOrderInputToMap(inputView.readOrder());
-            promotionService.createOrder(orderMenuAndCount);
-            return true;
+            Map<String, Integer> orderNameAndCount = inputValidator.convertOrderInputToMap(inputView.readOrder());
+            promotionService.initiateOrder(orderNameAndCount);
+            return false;
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e.getMessage());
-            return false;
+            return true;
         }
-    }
-
-    public void applyPromotion() {
-        promotionService.applyPromotion();
     }
 }
