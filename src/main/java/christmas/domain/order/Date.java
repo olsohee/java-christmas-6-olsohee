@@ -11,7 +11,7 @@ public class Date {
     private static final int MAX_DATE = 31;
     private static final int EVENT_YEAR = 2023;
     private static final int EVENT_MONTH = 12;
-    private int date;
+    private final int date;
 
     public Date(int date) {
         validate(date);

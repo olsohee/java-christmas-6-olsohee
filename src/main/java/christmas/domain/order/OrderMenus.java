@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class OrderMenus {
 
-    private List<OrderMenu> orderMenus;
+    private final List<OrderMenu> orderMenus;
 
     public OrderMenus(Map<String, Integer> orderMenuNameAndCount) {
         List<OrderMenu> orderMenus = orderMenuNameAndCount.keySet().stream()

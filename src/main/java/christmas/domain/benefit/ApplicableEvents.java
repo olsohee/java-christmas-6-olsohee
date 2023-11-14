@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ApplicableEvents {
 
-    private List<Event> applicableEvents;
+    private final List<Event> applicableEvents;
 
     public ApplicableEvents(List<Event> applicableEvents) {
         this.applicableEvents = applicableEvents;

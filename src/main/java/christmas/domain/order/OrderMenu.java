@@ -6,8 +6,8 @@ import christmas.message.ErrorMessage;
 
 public class OrderMenu {
 
-    private Menu menu;
-    private int quantity;
+    private final Menu menu;
+    private final int quantity;
 
     public OrderMenu(String menuName, int quantity) {
         this.menu = Menu.from(menuName);
