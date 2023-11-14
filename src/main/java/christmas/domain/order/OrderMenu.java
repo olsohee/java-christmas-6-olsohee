@@ -25,16 +25,8 @@ public class OrderMenu {
         return menu.getPrice() * quantity;
     }
 
-    public boolean isDrinkMenu() {
-        return Category.isDrinkMenu(menu);
-    }
-
-    public boolean isDessertMenu() {
-        return Category.isDessertMenu(menu);
-    }
-
-    public boolean isMainMenu() {
-        return Category.isMainMenu(menu);
+    public boolean checkCategory(Category category) {
+        return category.isContain(menu);
     }
 
     public Menu getMenu() {

@@ -1,5 +1,6 @@
 package christmas.domain.event;
 
+import christmas.domain.menu.Category;
 import christmas.domain.menu.Menu;
 import christmas.domain.order.*;
 
@@ -13,10 +14,10 @@ public enum Event {
             (date, orderMenus) -> date.getChristmasEventBenefitAmount()),
 
     WEEKDAY("평일 할인",
-            (date, orderMenus, totalOrderPrice) -> orderMenus.hasDesertMenu() && date.isApplicableWeekdayEvent(),
+            (date, orderMenus, totalOrderPrice) -> orderMenus.checkCategory(Category.DESERT) && date.isApplicableWeekdayEvent(),
             (date, orderMenus) -> orderMenus.getWeekdayEventBenefitAmount()),
     WEEKEND("주말 할인",
-            (date, orderMenus, totalOrderPrice) -> orderMenus.hasMainMenu() && date.isApplicableWeekendEvent(),
+            (date, orderMenus, totalOrderPrice) -> orderMenus.checkCategory(Category.MAIN) && date.isApplicableWeekendEvent(),
             (date, orderMenus) -> orderMenus.getWeekendEventBenefitAmount()),
     SPECIAL("특별 할인",
             (date, orderMenus, totalOrderPrice) -> date.isApplicableSpecialEvent(),

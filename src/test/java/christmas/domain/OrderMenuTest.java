@@ -1,5 +1,6 @@
 package christmas.domain;
 
+import christmas.domain.menu.Category;
 import christmas.domain.menu.Menu;
 import christmas.domain.order.OrderMenu;
 import christmas.message.ErrorMessage;
@@ -39,7 +40,7 @@ class OrderMenuTest {
     @CsvSource(value = {"제로콜라, true", "티본스테이크, false"})
     @ParameterizedTest
     void isDrinkMenu(String menuName, boolean result) {
-        Assertions.assertThat(new OrderMenu(menuName, 1).isDrinkMenu())
+        Assertions.assertThat(new OrderMenu(menuName, 1).checkCategory(Category.DRINK))
                 .isEqualTo(result);
     }
 
@@ -47,7 +48,7 @@ class OrderMenuTest {
     @CsvSource(value = {"초코케이크, true", "티본스테이크, false"})
     @ParameterizedTest
     void isDessertMenu(String menuName, boolean result) {
-        Assertions.assertThat(new OrderMenu(menuName, 1).isDessertMenu())
+        Assertions.assertThat(new OrderMenu(menuName, 1).checkCategory(Category.DESERT))
                 .isEqualTo(result);
     }
 
@@ -55,7 +56,7 @@ class OrderMenuTest {
     @CsvSource(value = {"티본스테이크, true", "아이스크림, false"})
     @ParameterizedTest
     void isMainMenu(String menuName, boolean result) {
-        Assertions.assertThat(new OrderMenu(menuName, 1).isMainMenu())
+        Assertions.assertThat(new OrderMenu(menuName, 1).checkCategory(Category.MAIN))
                 .isEqualTo(result);
     }
 }

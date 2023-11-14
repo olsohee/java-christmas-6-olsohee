@@ -15,15 +15,7 @@ public enum Category {
         this.menus = menus;
     }
 
-    public static boolean isDrinkMenu(Menu menu) {
-        return DRINK.menus.contains(menu);
-    }
-
-    public static boolean isDessertMenu(Menu menu) {
-        return DESERT.menus.contains(menu);
-    }
-
-    public static boolean isMainMenu(Menu menu) {
-        return MAIN.menus.contains(menu);
+    public boolean isContain(Menu menu) {
+        return this.menus.contains(menu);
     }
 }

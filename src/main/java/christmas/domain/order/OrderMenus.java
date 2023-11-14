@@ -1,5 +1,6 @@
 package christmas.domain.order;
 
+import christmas.domain.menu.Category;
 import christmas.message.NoticeMessage;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class OrderMenus {
 
     private void validateOnlyDrink(List<OrderMenu> orderMenus) {
         int drinkMenuCount = (int) orderMenus.stream()
-                .filter(orderMenu -> orderMenu.isDrinkMenu())
+                .filter(orderMenu -> orderMenu.checkCategory(Category.DRINK))
                 .count();
         if (drinkMenuCount == orderMenus.size()) {
             throw new IllegalArgumentException(NoticeMessage.IMPOSSIBLE_ORDER_BY_ONLY_DRINK.getNoticeMessage());
@@ -45,35 +46,23 @@ public class OrderMenus {
                 .sum();
     }
 
-    public boolean hasDesertMenu() {
+    public boolean checkCategory(Category category) {
         return orderMenus.stream()
-                .anyMatch(orderMenu -> orderMenu.isDessertMenu());
-    }
-
-    public boolean hasMainMenu() {
-        return orderMenus.stream()
-                .anyMatch(orderMenu -> orderMenu.isMainMenu());
+                .anyMatch(orderMenu -> orderMenu.checkCategory(category));
     }
 
     public int getWeekdayEventBenefitAmount() {
-        return getDessertMenuCount() * 2023;
-    }
-
-    private int getDessertMenuCount() {
-        return orderMenus.stream()
-                .filter(orderMenu -> orderMenu.isDessertMenu())
-                .mapToInt(orderMenu -> orderMenu.getQuantity())
-                .sum();
+        return getMenuCount(Category.DESERT) * 2023;
     }
 
     public int getWeekendEventBenefitAmount() {
-        return getMainMenuCount() * 2023;
+        return getMenuCount(Category.MAIN) * 2023;
     }
 
-    private int getMainMenuCount() {
+    private int getMenuCount(Category category) {
         return orderMenus.stream()
-                .filter(orderMenu -> orderMenu.isMainMenu())
-                .mapToInt(orderMenus -> orderMenus.getQuantity())
+                .filter(orderMenu -> orderMenu.checkCategory(category))
+                .mapToInt(orderMenu -> orderMenu.getQuantity())
                 .sum();
     }
 

@@ -3,14 +3,10 @@ package christmas.domain.order;
 import christmas.domain.event.EventDate;
 import christmas.message.ErrorMessage;
 
-import java.time.LocalDate;
-
 public class Date {
 
     private static final int MIN_DATE = 1;
     private static final int MAX_DATE = 31;
-    private static final int EVENT_YEAR = 2023;
-    private static final int EVENT_MONTH = 12;
     private final int date;
 
     public Date(int date) {
@@ -25,23 +21,19 @@ public class Date {
     }
 
     public boolean isApplicableChristmasEvent() {
-        return EventDate.isApplicableChristmasEvent(date);
+        return EventDate.CHRISTMAS_EVENT_DATE.isApplicableDate(date);
     }
 
     public boolean isApplicableWeekdayEvent() {
-        LocalDate localDate = LocalDate.of(EVENT_YEAR, EVENT_MONTH, date);
-        int dayOfWeekNumber = localDate.getDayOfWeek().getValue();
-        return EventDate.isApplicableWeekdayEvent(dayOfWeekNumber);
+        return EventDate.WEEKDAY_EVENT_DATE.isApplicableDate(date);
     }
 
     public boolean isApplicableWeekendEvent() {
-        LocalDate localDate = LocalDate.of(EVENT_YEAR, EVENT_MONTH, date);
-        int dayOfWeekNumber = localDate.getDayOfWeek().getValue();
-        return EventDate.isApplicableWeekendEvent(dayOfWeekNumber);
+        return EventDate.WEEKEND_EVENT_DATE.isApplicableDate(date);
     }
 
     public boolean isApplicableSpecialEvent() {
-        return EventDate.isApplicableSpecialEvent(date);
+        return EventDate.SPECIAL_EVENT_DATE.isApplicableDate(date);
     }
 
     public int getChristmasEventBenefitAmount() {

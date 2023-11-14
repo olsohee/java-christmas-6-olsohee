@@ -1,34 +1,31 @@
 package christmas.domain.event;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.IntStream;
 
 public enum EventDate {
 
-    CHRISTMAS(IntStream.range(1, 26).boxed().toList()),
-    WEEKDAY(List.of(7, 1, 2, 3, 4)),
-    WEEKEND(List.of(5, 6)),
-    SPECIAL(List.of(3, 10, 17, 24, 25, 31));
+    CHRISTMAS_EVENT_DATE(Event.CHRISTMAS, IntStream.range(1, 26).boxed().toList()),
+    WEEKDAY_EVENT_DATE(Event.WEEKDAY, List.of(7, 1, 2, 3, 4)),
+    WEEKEND_EVENT_DATE(Event.WEEKEND, List.of(5, 6)),
+    SPECIAL_EVENT_DATE(Event.SPECIAL, List.of(3, 10, 17, 24, 25, 31));
 
-    private final List<Integer> eventApplicableDate;
+    private static final int EVENT_YEAR = 2023;
+    private static final int EVENT_MONTH = 12;
+    private final Event event;
+    private final List<Integer> applicableDates;
 
-    EventDate(List<Integer> eventApplicableDate) {
-        this.eventApplicableDate = eventApplicableDate;
+    EventDate(Event event, List<Integer> applicableDates) {
+        this.event = event;
+        this.applicableDates = applicableDates;
     }
 
-    public static boolean isApplicableChristmasEvent(int date) {
-        return CHRISTMAS.eventApplicableDate.contains(date);
-    }
-
-    public static boolean isApplicableWeekdayEvent(int dayOfWeekNumber) {
-        return WEEKDAY.eventApplicableDate.contains(dayOfWeekNumber);
-    }
-
-    public static boolean isApplicableWeekendEvent(int dayOfWeekNumber) {
-        return WEEKEND.eventApplicableDate.contains(dayOfWeekNumber);
-    }
-
-    public static boolean isApplicableSpecialEvent(int date) {
-        return SPECIAL.eventApplicableDate.contains(date);
+    public boolean isApplicableDate(int date) {
+        if (this == WEEKDAY_EVENT_DATE || this == WEEKEND_EVENT_DATE) {
+            LocalDate localDate = LocalDate.of(EVENT_YEAR, EVENT_MONTH, date);
+            date = localDate.getDayOfWeek().getValue();
+        }
+        return this.applicableDates.contains(date);
     }
 }
