@@ -45,25 +45,25 @@ public class PromotionService {
     }
 
     public ResultDto createEventResultDto() {
-        List<OrderMenuDto> orderMenuDtos = orderMenus.getOrderMenus().stream()
-                .map(orderMenu -> new OrderMenuDto(orderMenu.getMenu().getMenuName(), orderMenu.getQuantity()))
+        List<OrderMenuDto> orderMenuDtos = createOrderMenuDtos();
+        List<EventDto> eventDtos = applicableEvents.getEvents().stream()
+                .map(event -> new EventDto(event.getEventName(), event.getBenefitAmount(date, orderMenus)))
                 .toList();
+        int payment = totalOrderPrice.getTotalOrderPrice() - totalDiscountAmount;
 
-        List<BenefitDto> BenefitDtos = applicableEvents.getEvents().stream()
-                .map(event -> new BenefitDto(event.getEventName(), event.getBenefitAmount(date, orderMenus)))
-                .toList();
-
-        return new ResultDto(date.getDate(), orderMenuDtos, totalOrderPrice.getTotalOrderPrice(), applicableEvents.containGiftEvent(),
-                BenefitDtos, totalBenefitAmount,
-                totalOrderPrice.getTotalOrderPrice() - totalDiscountAmount,
-                badge.getBadgeName());
+        return new ResultDto(date.getDate(), orderMenuDtos, totalOrderPrice.getTotalOrderPrice(),
+                applicableEvents.containGiftEvent(), eventDtos, totalBenefitAmount,
+                payment, badge.getBadgeName());
     }
 
     public ResultDto createNonEventResultDto() {
-        List<OrderMenuDto> orderMenuDtos = orderMenus.getOrderMenus().stream()
+        List<OrderMenuDto> orderMenuDtos = createOrderMenuDtos();
+        return new ResultDto(date.getDate(), orderMenuDtos, totalOrderPrice.getTotalOrderPrice());
+    }
+
+    private List<OrderMenuDto> createOrderMenuDtos() {
+        return orderMenus.getOrderMenus().stream()
                 .map(orderMenu -> new OrderMenuDto(orderMenu.getMenu().getMenuName(), orderMenu.getQuantity()))
                 .toList();
-
-        return new ResultDto(date.getDate(), orderMenuDtos, totalOrderPrice.getTotalOrderPrice());
     }
 }
