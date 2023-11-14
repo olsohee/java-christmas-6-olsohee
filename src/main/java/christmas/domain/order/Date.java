@@ -1,11 +1,16 @@
 package christmas.domain.order;
 
+import christmas.domain.event.EventDate;
 import christmas.message.ErrorMessage;
 
 import java.time.LocalDate;
 
 public class Date {
 
+    private static final int MIN_DATE = 1;
+    private static final int MAX_DATE = 31;
+    private static final int EVENT_YEAR = 2023;
+    private static final int EVENT_MONTH = 12;
     private int date;
 
     public Date(int date) {
@@ -14,29 +19,29 @@ public class Date {
     }
 
     private void validate(int date) {
-        if(date < 1 || date > 31) {
+        if(date < MIN_DATE || date > MAX_DATE) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_DATE_INPUT.getErrorMessage());
         }
     }
 
     public boolean isApplicableChristmasEvent() {
-        return (date >= 1 || date <= 25);
+        return EventDate.isApplicableChristmasEvent(date);
     }
 
     public boolean isApplicableWeekdayEvent() {
-        LocalDate localDate = LocalDate.of(2023, 12, date);
+        LocalDate localDate = LocalDate.of(EVENT_YEAR, EVENT_MONTH, date);
         int dayOfWeekNumber = localDate.getDayOfWeek().getValue();
-        return (dayOfWeekNumber == 7 || dayOfWeekNumber == 1 || dayOfWeekNumber == 2 || dayOfWeekNumber == 3 || dayOfWeekNumber == 4);
+        return EventDate.isApplicableWeekdayEvent(dayOfWeekNumber);
     }
 
     public boolean isApplicableWeekendEvent() {
-        LocalDate localDate = LocalDate.of(2023, 12, date);
+        LocalDate localDate = LocalDate.of(EVENT_YEAR, EVENT_MONTH, date);
         int dayOfWeekNumber = localDate.getDayOfWeek().getValue();
-        return (dayOfWeekNumber == 5 || dayOfWeekNumber == 6);
+        return EventDate.isApplicableWeekendEvent(dayOfWeekNumber);
     }
 
     public boolean isApplicableSpecialEvent() {
-        return (date == 3 || date == 10 || date == 17 || date == 24 || date == 25 || date == 31);
+        return EventDate.isApplicableSpecialEvent(date);
     }
 
     public int getChristmasEventBenefitAmount() {
