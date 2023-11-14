@@ -1,8 +1,6 @@
 package christmas.domain.order;
 
-import christmas.domain.order.OrderMenu;
-import christmas.message.ErrorMessage;
-import christmas.message.EventNoticeMessage;
+import christmas.message.NoticeMessage;
 
 import java.util.List;
 import java.util.Map;
@@ -20,26 +18,15 @@ public class OrderMenus {
     }
 
     private void validate(List<OrderMenu> orderMenus) {
-        validateMinCount(orderMenus);
         validateMaxCount(orderMenus);
         validateOnlyDrink(orderMenus);
-    }
-
-    private void validateMinCount(List<OrderMenu> orderMenus) {
-        int totalOrderAmount = orderMenus.stream()
-                .mapToInt(orderMenu -> orderMenu.getQuantity()).sum();
-
-        if (totalOrderAmount < 1) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER_INPUT.getErrorMessage());
-        }
     }
 
     private void validateMaxCount(List<OrderMenu> orderMenus) {
         int totalOrderAmount = orderMenus.stream()
                 .mapToInt(orderMenu -> orderMenu.getQuantity()).sum();
-
         if (totalOrderAmount > 20) {
-            throw new IllegalArgumentException(EventNoticeMessage.IMPOSSIBLE_ORDER_BY_MAX_ORDER_COUNT.getErrorMessage());
+            throw new IllegalArgumentException(NoticeMessage.IMPOSSIBLE_ORDER_BY_MAX_ORDER_COUNT.getNoticeMessage());
         }
     }
 
@@ -48,7 +35,7 @@ public class OrderMenus {
                 .filter(orderMenu -> orderMenu.isDrinkMenu())
                 .count();
         if (drinkMenuCount == orderMenus.size()) {
-            throw new IllegalArgumentException(EventNoticeMessage.IMPOSSIBLE_ORDER_BY_ONLY_DRINK.getErrorMessage());
+            throw new IllegalArgumentException(NoticeMessage.IMPOSSIBLE_ORDER_BY_ONLY_DRINK.getNoticeMessage());
         }
     }
 
