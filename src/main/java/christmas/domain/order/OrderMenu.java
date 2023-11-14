@@ -1,4 +1,4 @@
-package christmas.domain;
+package christmas.domain.order;
 
 import christmas.domain.menu.Category;
 import christmas.domain.menu.Menu;
@@ -18,15 +18,15 @@ public class OrderMenu {
     }
 
     public boolean isDrinkMenu() {
-        return menu.getCategory().equals(Category.DRINK);
+        return Category.isDrinkMenu(menu);
     }
 
     public boolean isDessertMenu() {
-        return menu.getCategory().equals(Category.DESERT);
+        return Category.isDessertMenu(menu);
     }
 
     public boolean isMainMenu() {
-        return menu.getCategory().equals(Category.MAIN);
+        return Category.isMainMenu(menu);
     }
 
     public Menu getMenu() {
