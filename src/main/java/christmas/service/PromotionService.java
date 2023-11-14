@@ -1,12 +1,11 @@
 package christmas.service;
 
-import christmas.domain.*;
-import christmas.domain.benefit.Events;
+import christmas.domain.benefit.*;
 import christmas.domain.event.Event;
 import christmas.domain.menu.Menu;
 import christmas.domain.order.*;
 import christmas.dto.*;
-import christmas.message.EventNoticeMessage;
+import christmas.message.NoticeMessage;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,7 @@ public class PromotionService {
     private Date date;
     private OrderMenus orderMenus;
     private TotalOrderPrice totalOrderPrice;
-    private Events events;
+    private ApplicableEvents applicableEvents;
     private int totalBenefitAmount;
     private int totalDiscountAmount;
     private Badge badge;
@@ -24,21 +23,22 @@ public class PromotionService {
         this.date = new Date(date);
     }
 
-    public void initiateOrder(Map<String, Integer> orderMenuNameAndCount) {
+    public void initiateOrder(Map<String, Integer> orderNameAndCount) {
+        orderMenus = new OrderMenus(orderNameAndCount);
         totalOrderPrice = new TotalOrderPrice(orderMenus.calculateTotalOrderPrice());
     }
 
     public void validateEventApplicability() {
         if (!totalOrderPrice.isApplicableEvent()) {
-            throw new IllegalArgumentException(EventNoticeMessage.NOT_APPLICABLE_EVENT.getErrorMessage());
+            throw new IllegalArgumentException(NoticeMessage.NOT_APPLICABLE_EVENT.getNoticeMessage());
         }
     }
 
     public void applyPromotion() {
-        events = new Events(Event.getApplicableEvents(date, orderMenus, totalOrderPrice));
-        totalBenefitAmount = events.calculateTotalBenefitAmount(date, orderMenus);
+        applicableEvents = new ApplicableEvents(Event.getApplicableEvents(date, orderMenus, totalOrderPrice));
+        totalBenefitAmount = applicableEvents.calculateTotalBenefitAmount(date, orderMenus);
         totalDiscountAmount = totalBenefitAmount;
-        if (events.containGiftEvent()) {
+        if (applicableEvents.containGiftEvent()) {
             totalDiscountAmount -= Menu.CHAMPAGNE.getPrice();
         }
         badge = Badge.getBadge(totalBenefitAmount);
@@ -49,11 +49,11 @@ public class PromotionService {
                 .map(orderMenu -> new OrderMenuDto(orderMenu.getMenu().getMenuName(), orderMenu.getQuantity()))
                 .toList();
 
-        List<BenefitDto> BenefitDtos = events.getEvents().stream()
+        List<BenefitDto> BenefitDtos = applicableEvents.getEvents().stream()
                 .map(event -> new BenefitDto(event.getEventName(), event.getBenefitAmount(date, orderMenus)))
                 .toList();
 
-        return new ResultDto(date.getDate(), orderMenuDtos, totalOrderPrice.getTotalOrderPrice(), events.containGiftEvent(),
+        return new ResultDto(date.getDate(), orderMenuDtos, totalOrderPrice.getTotalOrderPrice(), applicableEvents.containGiftEvent(),
                 BenefitDtos, totalBenefitAmount,
                 totalOrderPrice.getTotalOrderPrice() - totalDiscountAmount,
                 badge.getBadgeName());
