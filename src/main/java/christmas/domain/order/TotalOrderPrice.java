@@ -2,15 +2,14 @@ package christmas.domain.order;
 
 public class TotalOrderPrice {
 
-    private int totalOrderPrice;
+    private final int totalOrderPrice;
 
-    public TotalOrderPrice(int totalOrderPrice ) {
-
+    public TotalOrderPrice(int totalOrderPrice) {
         this.totalOrderPrice = totalOrderPrice;
     }
 
     public boolean isApplicableEvent() {
-        return (totalOrderPrice >= 10000);
+        return totalOrderPrice >= 10000;
     }
 
     public boolean isApplicableGiftEvent() {
