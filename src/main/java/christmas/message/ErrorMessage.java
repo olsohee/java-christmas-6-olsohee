@@ -5,7 +5,7 @@ public enum ErrorMessage {
     INVALID_DATE_INPUT("유효하지 않은 날짜입니다. 다시 입력해 주세요."),
     INVALID_ORDER_INPUT("유효하지 않은 주문입니다. 다시 입력해 주세요.");
 
-    private static final String ERROR_FORMAT = "[ERROR]";
+    private static final String ERROR_HEADER = "[ERROR]";
     private final String errorMessage;
 
     ErrorMessage(String errorMessage) {
@@ -13,6 +13,6 @@ public enum ErrorMessage {
     }
 
     public String getErrorMessage() {
-        return String.format("%s %s", ERROR_FORMAT, errorMessage);
+        return String.format("%s %s", ERROR_HEADER, errorMessage);
     }
 }
