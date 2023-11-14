@@ -1,19 +1,22 @@
-package christmas.domain;
+package christmas.domain.order;
 
+import christmas.domain.order.OrderMenu;
 import christmas.message.ErrorMessage;
 import christmas.message.EventNoticeMessage;
 
 import java.util.List;
+import java.util.Map;
 
-public class Order {
+public class OrderMenus {
 
     private List<OrderMenu> orderMenus;
-    private int totalOrderPrice;
 
-    public Order(List<OrderMenu> orderMenus) {
+    public OrderMenus(Map<String, Integer> orderMenuNameAndCount) {
+        List<OrderMenu> orderMenus = orderMenuNameAndCount.keySet().stream()
+                .map(menuName -> new OrderMenu(menuName, orderMenuNameAndCount.get(menuName)))
+                .toList();
         validate(orderMenus);
         this.orderMenus = orderMenus;
-        this.totalOrderPrice = calculateTotalOrderPrice();
     }
 
     private void validate(List<OrderMenu> orderMenus) {
@@ -49,17 +52,10 @@ public class Order {
         }
     }
 
-    private int calculateTotalOrderPrice() {
+    public int calculateTotalOrderPrice() {
         return orderMenus.stream()
                 .mapToInt(orderMenu -> orderMenu.calculateOrderPrice())
                 .sum();
-    }
-
-    public boolean isApplicableEvent() {
-        int totalOrderPrice = orderMenus.stream()
-                .mapToInt(orderMenu -> orderMenu.calculateOrderPrice())
-                .sum();
-        return (totalOrderPrice >= 10000);
     }
 
     public boolean hasDesertMenu() {
@@ -70,10 +66,6 @@ public class Order {
     public boolean hasMainMenu() {
         return orderMenus.stream()
                 .anyMatch(orderMenu -> orderMenu.isMainMenu());
-    }
-
-    public boolean isApplicableGiftEvent() {
-        return totalOrderPrice >= 120000;
     }
 
     public int getWeekdayEventBenefitAmount() {
@@ -100,9 +92,5 @@ public class Order {
 
     public List<OrderMenu> getOrderMenus() {
         return orderMenus;
-    }
-
-    public int getTotalOrderPrice() {
-        return totalOrderPrice;
     }
 }

@@ -1,9 +1,11 @@
 package christmas.service;
 
 import christmas.domain.*;
+import christmas.domain.benefit.Events;
+import christmas.domain.event.Event;
+import christmas.domain.menu.Menu;
+import christmas.domain.order.*;
 import christmas.dto.*;
-import christmas.dto.BenefitDto;
-import christmas.dto.OrderMenuDto;
 import christmas.message.EventNoticeMessage;
 
 import java.util.List;
@@ -11,47 +13,57 @@ import java.util.Map;
 
 public class PromotionService {
     private Date date;
-    private Order order;
-    private Benefit benefit;
+    private OrderMenus orderMenus;
+    private TotalOrderPrice totalOrderPrice;
+    private Events events;
+    private int totalBenefitAmount;
+    private int totalDiscountAmount;
+    private Badge badge;
 
-    public void createDate(int date) {
+    public void initiateDate(int date) {
         this.date = new Date(date);
     }
 
-    public void createOrder(Map<String, Integer> orderMenuAndCount) {
-        this.order = new Order(orderMenuAndCount);
+    public void initiateOrder(Map<String, Integer> orderMenuNameAndCount) {
+        totalOrderPrice = new TotalOrderPrice(orderMenus.calculateTotalOrderPrice());
     }
 
     public void validateEventApplicability() {
-        if (!order.isApplicableEvent()) {
+        if (!totalOrderPrice.isApplicableEvent()) {
             throw new IllegalArgumentException(EventNoticeMessage.NOT_APPLICABLE_EVENT.getErrorMessage());
         }
     }
 
     public void applyPromotion() {
-        this.benefit = new Benefit(order, date);
+        events = new Events(Event.getApplicableEvents(date, orderMenus, totalOrderPrice));
+        totalBenefitAmount = events.calculateTotalBenefitAmount(date, orderMenus);
+        totalDiscountAmount = totalBenefitAmount;
+        if (events.containGiftEvent()) {
+            totalDiscountAmount -= Menu.CHAMPAGNE.getPrice();
+        }
+        badge = Badge.getBadge(totalBenefitAmount);
     }
 
     public ResultDto createEventResultDto() {
-        List<OrderMenuDto> orderMenuDtos = order.getOrderMenus().stream()
+        List<OrderMenuDto> orderMenuDtos = orderMenus.getOrderMenus().stream()
                 .map(orderMenu -> new OrderMenuDto(orderMenu.getMenu().getMenuName(), orderMenu.getQuantity()))
                 .toList();
 
-        List<BenefitDto> BenefitDtos = benefit.getEvents().stream()
-                .map(event -> new BenefitDto(event.getEventName(), event.getBenefitAmount(order, date)))
+        List<BenefitDto> BenefitDtos = events.getEvents().stream()
+                .map(event -> new BenefitDto(event.getEventName(), event.getBenefitAmount(date, orderMenus)))
                 .toList();
 
-        return new ResultDto(date.getDate(), orderMenuDtos, order.getTotalOrderPrice(), benefit.hasGift(),
-                BenefitDtos, benefit.getTotalBenefitAmount(),
-                order.getTotalOrderPrice() - benefit.getTotalDiscountAmount(),
-                benefit.getBadge().getBadgeName());
+        return new ResultDto(date.getDate(), orderMenuDtos, totalOrderPrice.getTotalOrderPrice(), events.containGiftEvent(),
+                BenefitDtos, totalBenefitAmount,
+                totalOrderPrice.getTotalOrderPrice() - totalDiscountAmount,
+                badge.getBadgeName());
     }
 
     public ResultDto createNonEventResultDto() {
-        List<OrderMenuDto> orderMenuDtos = order.getOrderMenus().stream()
+        List<OrderMenuDto> orderMenuDtos = orderMenus.getOrderMenus().stream()
                 .map(orderMenu -> new OrderMenuDto(orderMenu.getMenu().getMenuName(), orderMenu.getQuantity()))
                 .toList();
 
-        return new ResultDto(date.getDate(), orderMenuDtos, order.getTotalOrderPrice());
+        return new ResultDto(date.getDate(), orderMenuDtos, totalOrderPrice.getTotalOrderPrice());
     }
 }
