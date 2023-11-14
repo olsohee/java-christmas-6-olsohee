@@ -18,7 +18,6 @@ public class PromotionService {
     private final OrderMenus orderMenus;
     private final TotalOrderPrice totalOrderPrice;
     private ApplicableEvents applicableEvents;
-    private Badge badge;
 
     public PromotionService(Date date, OrderMenus orderMenus, TotalOrderPrice totalOrderPrice) {
         this.date = date;
@@ -28,7 +27,6 @@ public class PromotionService {
 
     public void startPromotion() {
         applicableEvents = new ApplicableEvents(Event.getApplicableEvents(date, orderMenus, totalOrderPrice));
-        badge = Badge.getBadge(applicableEvents.calculateTotalBenefitAmount(date, orderMenus));
     }
 
     public PromotionDto createPromotionDto() {
@@ -40,6 +38,7 @@ public class PromotionService {
         if (applicableEvents.containGiftEvent()) {
             payment += Menu.CHAMPAGNE.getPrice();
         }
+        Badge badge = Badge.getBadge(applicableEvents.calculateTotalBenefitAmount(date, orderMenus));
 
         return new PromotionDto(applicableEvents.containGiftEvent(), eventDtos,
                 totalBenefitAmount, payment, badge.getBadgeName());
