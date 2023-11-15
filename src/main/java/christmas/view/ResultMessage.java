@@ -68,7 +68,7 @@ public class ResultMessage {
 
     public String getTotalBenefitAmount(PromotionDto promotionDto) {
         if(promotionDto == null) {
-            return NONE;
+            return String.format(PRICE, 0);
         }
         return String.format(TOTAL_BENEFIT_AMOUNT, decimalFormat.format(promotionDto.totalBenefitAmount()));
     }
