@@ -38,7 +38,7 @@ public class OrderMenus {
         return calculateTotalPrice() >= 120000;
     }
 
-    private int calculateTotalPrice() {
+    public int calculateTotalPrice() {
         return orderMenus.keySet().stream()
                 .mapToInt(menu -> menu.getPrice() * orderMenus.get(menu))
                 .sum();

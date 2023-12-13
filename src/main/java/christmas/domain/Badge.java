@@ -23,7 +23,7 @@ public enum Badge {
         return NONE;
     }
 
-    public int getPrice() {
-        return price;
+    public String getName() {
+        return name;
     }
 }

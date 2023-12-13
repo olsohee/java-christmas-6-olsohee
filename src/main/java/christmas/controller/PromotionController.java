@@ -43,13 +43,20 @@ public class PromotionController {
             Map<Menu, Integer> orderMenus = inputConvertor.convertStringToMenu(inputView.readMenu());
             promotionService.validateOrder(orderMenus);
             promotionService.createOrder(orderMenus);
-            promotionService.startPromotion();
-            outputView.printOrderMenu(promotionService.getOrderMenuDto());
+            if (!promotionService.canPromotion()) {
+                outputView.printNonPromotion(promotionService.getNonPromotionDto());
+                return;
+            }
+            startPromotion();
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e.getMessage());
             readMenu();
         }
-
     }
 
+    private void startPromotion() {
+        promotionService.startPromotion();
+        outputView.printOrderMenu(promotionService.getOrderMenuDto());
+        outputView.printEventBenefit(promotionService.getEventBenefitDto());
+    }
 }

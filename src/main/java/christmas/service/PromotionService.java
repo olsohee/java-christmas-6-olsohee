@@ -1,9 +1,13 @@
 package christmas.service;
 
 import christmas.domain.*;
+import christmas.dto.BenefitDto;
+import christmas.dto.EventBenefitDto;
+import christmas.dto.NonPromotionDto;
 import christmas.dto.OrderMenuDto;
 import christmas.message.ErrorMessage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,30 +50,36 @@ public class PromotionService {
         this.orderMenus = new OrderMenus(orderMenus);
     }
 
+    public boolean canPromotion() {
+        return orderMenus.canPromotion();
+    }
+
     public void startPromotion() {
-        validateCanPromotion();
         applicableEventsAndBenefit = Event.getApplicableEventsAndBenefit(date, orderMenus);
         int totalBenefitAmount = 0;
         for (Event event : applicableEventsAndBenefit.keySet()) {
             totalBenefitAmount += applicableEventsAndBenefit.get(event);
         }
         badge = Badge.findBadgeByBenefitAmount(totalBenefitAmount);
-//        for (Event event : applicableEventsAndBenefit.keySet()) {
-//            System.out.println(event);
-//            System.out.println(applicableEventsAndBenefit.get(event));
-//        }
-//        System.out.println(badge);
-    }
-
-    public void validateCanPromotion() {
-        if (!orderMenus.canPromotion()) {
-            throw new IllegalArgumentException(ErrorMessage.NOT_POSSIBLE_ORDER.getErrorMessage());
-        }
     }
 
     public List<OrderMenuDto> getOrderMenuDto() {
         return orderMenus.getOrderMenus().keySet().stream()
                 .map(menu -> new OrderMenuDto(menu.getName(), orderMenus.getOrderMenus().get(menu)))
                 .toList();
+    }
+
+    public EventBenefitDto getEventBenefitDto() {
+        List<BenefitDto> benefitDtos = new ArrayList<>();
+        for (Event event : applicableEventsAndBenefit.keySet()) {
+            benefitDtos.add(new BenefitDto(event.getName(), applicableEventsAndBenefit.get(event)));
+        }
+
+        return new EventBenefitDto(orderMenus.calculateTotalPrice(), applicableEventsAndBenefit.containsKey(Event.GIFT),
+                benefitDtos, badge.getName());
+    }
+
+    public NonPromotionDto getNonPromotionDto() {
+        return new NonPromotionDto(orderMenus.calculateTotalPrice());
     }
 }

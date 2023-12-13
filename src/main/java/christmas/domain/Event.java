@@ -53,4 +53,8 @@ public enum Event {
         }
         return applicableEventsAndBenefit;
     }
+
+    public String getName() {
+        return name;
+    }
 }
