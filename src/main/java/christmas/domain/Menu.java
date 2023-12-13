@@ -40,4 +40,8 @@ public enum Menu {
     public String getName() {
         return name;
     }
+
+    public boolean isDrink() {
+        return this.category.equals(Category.DRINK);
+    }
 }

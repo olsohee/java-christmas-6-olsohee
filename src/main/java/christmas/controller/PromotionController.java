@@ -1,9 +1,12 @@
 package christmas.controller;
 
 import christmas.convertor.InputConvertor;
+import christmas.domain.Menu;
 import christmas.service.PromotionService;
 import christmas.view.InputView;
 import christmas.view.OutputView;
+
+import java.util.Map;
 
 public class PromotionController {
 
@@ -37,8 +40,8 @@ public class PromotionController {
 
     private void readMenu() {
         try {
-            inputConvertor.convertStringToMenu(inputView.readMenu());
-
+            Map<Menu, Integer> orderMenus = inputConvertor.convertStringToMenu(inputView.readMenu());
+            promotionService.validateOrder(orderMenus);
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e.getMessage());
             readMenu();

@@ -3,7 +3,6 @@ package christmas.convertor;
 import christmas.domain.Menu;
 import christmas.message.ErrorMessage;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,18 +28,18 @@ public class InputConvertor {
     }
 
     public  Map<Menu, Integer> convertStringToMenu(String input) {
-        Map<Menu, Integer> order = new HashMap<>();
+        Map<Menu, Integer> orderMenus = new HashMap<>();
 
         String[] inputSplit = input.split(",");
         for (String str : inputSplit) {
             String name = str.split("-")[0].trim();
             Menu menu = Menu.findMenuByName(name);
             int count = convertStringToInt(str.split("-")[1].trim());
-            validateDuplicated(order, menu);
+            validateDuplicated(orderMenus, menu);
             validateCount(count);
-            order.put(menu, count);
+            orderMenus.put(menu, count);
         }
-        return order;
+        return orderMenus;
     }
 
     private void validateCount(int count) {
