@@ -53,4 +53,8 @@ public class OrderMenus {
         return orderMenus.keySet().stream()
                 .anyMatch(menu -> menu.isMain());
     }
+
+    public Map<Menu, Integer> getOrderMenus() {
+        return orderMenus;
+    }
 }

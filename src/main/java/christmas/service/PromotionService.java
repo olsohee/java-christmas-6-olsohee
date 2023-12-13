@@ -1,8 +1,10 @@
 package christmas.service;
 
 import christmas.domain.*;
+import christmas.dto.OrderMenuDto;
 import christmas.message.ErrorMessage;
 
+import java.util.List;
 import java.util.Map;
 
 public class PromotionService {
@@ -52,11 +54,11 @@ public class PromotionService {
             totalBenefitAmount += applicableEventsAndBenefit.get(event);
         }
         badge = Badge.findBadgeByBenefitAmount(totalBenefitAmount);
-        for (Event event : applicableEventsAndBenefit.keySet()) {
-            System.out.println(event);
-            System.out.println(applicableEventsAndBenefit.get(event));
-        }
-        System.out.println(badge);
+//        for (Event event : applicableEventsAndBenefit.keySet()) {
+//            System.out.println(event);
+//            System.out.println(applicableEventsAndBenefit.get(event));
+//        }
+//        System.out.println(badge);
     }
 
     public void validateCanPromotion() {
@@ -65,7 +67,9 @@ public class PromotionService {
         }
     }
 
-    public void getDto() {
-//        todo: applicableEventsAndBenefit -> dto 만들기
+    public List<OrderMenuDto> getOrderMenuDto() {
+        return orderMenus.getOrderMenus().keySet().stream()
+                .map(menu -> new OrderMenuDto(menu.getName(), orderMenus.getOrderMenus().get(menu)))
+                .toList();
     }
 }

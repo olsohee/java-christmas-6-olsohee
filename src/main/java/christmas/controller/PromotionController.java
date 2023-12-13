@@ -44,7 +44,7 @@ public class PromotionController {
             promotionService.validateOrder(orderMenus);
             promotionService.createOrder(orderMenus);
             promotionService.startPromotion();
-            promotionService.getDto();
+            outputView.printOrderMenu(promotionService.getOrderMenuDto());
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e.getMessage());
             readMenu();
