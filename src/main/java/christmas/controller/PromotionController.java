@@ -22,6 +22,7 @@ public class PromotionController {
     public void run() {
         outputView.printStartMessage();
         readDate();
+        readMenu();
     }
 
     private void readDate() {
@@ -33,4 +34,16 @@ public class PromotionController {
             readDate();
         }
     }
+
+    private void readMenu() {
+        try {
+            inputConvertor.convertStringToMenu(inputView.readMenu());
+
+        } catch (IllegalArgumentException e) {
+            outputView.printErrorMessage(e.getMessage());
+            readMenu();
+        }
+
+    }
+
 }

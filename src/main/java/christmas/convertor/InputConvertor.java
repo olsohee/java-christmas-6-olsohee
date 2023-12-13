@@ -1,6 +1,11 @@
 package christmas.convertor;
 
+import christmas.domain.Menu;
 import christmas.message.ErrorMessage;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class InputConvertor {
 
@@ -20,6 +25,33 @@ public class InputConvertor {
            return Integer.parseInt(input);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_DATE.getErrorMessage());
+        }
+    }
+
+    public  Map<Menu, Integer> convertStringToMenu(String input) {
+        Map<Menu, Integer> order = new HashMap<>();
+
+        String[] inputSplit = input.split(",");
+        for (String str : inputSplit) {
+            String name = str.split("-")[0].trim();
+            Menu menu = Menu.findMenuByName(name);
+            int count = convertStringToInt(str.split("-")[1].trim());
+            validateDuplicated(order, menu);
+            validateCount(count);
+            order.put(menu, count);
+        }
+        return order;
+    }
+
+    private void validateCount(int count) {
+        if (count < 1) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_INPUT.getErrorMessage());
+        }
+    }
+
+    private void validateDuplicated(Map<Menu, Integer> order, Menu menu) {
+        if (order.containsKey(menu)) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_INPUT.getErrorMessage());
         }
     }
 }
