@@ -42,6 +42,9 @@ public class PromotionController {
         try {
             Map<Menu, Integer> orderMenus = inputConvertor.convertStringToMenu(inputView.readMenu());
             promotionService.validateOrder(orderMenus);
+            promotionService.createOrder(orderMenus);
+            promotionService.startPromotion();
+            promotionService.getDto();
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e.getMessage());
             readMenu();

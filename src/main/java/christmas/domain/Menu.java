@@ -37,11 +37,23 @@ public enum Menu {
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_INPUT.getErrorMessage()));
     }
 
+    public boolean isDrink() {
+        return this.category.equals(Category.DRINK);
+    }
+
+    public boolean isDessert() {
+        return this.category.equals(Category.DESSERT);
+    }
+
+    public boolean isMain() {
+        return this.category.equals(Category.MAIN);
+    }
+
     public String getName() {
         return name;
     }
 
-    public boolean isDrink() {
-        return this.category.equals(Category.DRINK);
+    public int getPrice() {
+        return price;
     }
 }

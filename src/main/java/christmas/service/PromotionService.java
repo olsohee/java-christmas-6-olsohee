@@ -1,7 +1,6 @@
 package christmas.service;
 
-import christmas.domain.Date;
-import christmas.domain.Menu;
+import christmas.domain.*;
 import christmas.message.ErrorMessage;
 
 import java.util.Map;
@@ -9,6 +8,9 @@ import java.util.Map;
 public class PromotionService {
 
     private Date date;
+    private OrderMenus orderMenus;
+    private Map<Event, Integer> applicableEventsAndBenefit;
+    private Badge badge;
 
     public void createDate(int date) {
         this.date = new Date(date);
@@ -36,5 +38,34 @@ public class PromotionService {
             }
         }
         throw new IllegalArgumentException(ErrorMessage.NOT_POSSIBLE_ORDER.getErrorMessage());
+    }
+
+    public void createOrder(Map<Menu, Integer> orderMenus) {
+        this.orderMenus = new OrderMenus(orderMenus);
+    }
+
+    public void startPromotion() {
+        validateCanPromotion();
+        applicableEventsAndBenefit = Event.getApplicableEventsAndBenefit(date, orderMenus);
+        int totalBenefitAmount = 0;
+        for (Event event : applicableEventsAndBenefit.keySet()) {
+            totalBenefitAmount += applicableEventsAndBenefit.get(event);
+        }
+        badge = Badge.findBadgeByBenefitAmount(totalBenefitAmount);
+        for (Event event : applicableEventsAndBenefit.keySet()) {
+            System.out.println(event);
+            System.out.println(applicableEventsAndBenefit.get(event));
+        }
+        System.out.println(badge);
+    }
+
+    public void validateCanPromotion() {
+        if (!orderMenus.canPromotion()) {
+            throw new IllegalArgumentException(ErrorMessage.NOT_POSSIBLE_ORDER.getErrorMessage());
+        }
+    }
+
+    public void getDto() {
+//        todo: applicableEventsAndBenefit -> dto 만들기
     }
 }
